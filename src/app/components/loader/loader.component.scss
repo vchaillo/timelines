@@ -1,0 +1,20 @@
+@import '../../../variables';
+
+.loader {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+
+	h1 {
+		font-size: 4rem;
+
+		.dot {
+			display: inline-block;
+		}
+
+		@media (max-width: $mobile-breakpoint) {
+			font-size: 2rem;
+		}
+	}
+}

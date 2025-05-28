@@ -1,28 +1,23 @@
 <div class="container">
-	<h1>Timelines</h1>
-	<h1>Timelines</h1>
-	<h1>Timelines</h1>
-	<h1>Timelines</h1>
-	<h1>Timelines</h1>
-	<h1>Timelines</h1>
-	<h1>Timelines</h1>
-	<h1>Timelines</h1>
-	<h1>Timelines</h1>
-	<h1>Timelines</h1>
-	<h1>Timelines</h1>
-	<h1>Timelines</h1>
-	<h1>Timelines</h1>
-	<h1>Timelines</h1>
-	<h1>Timelines</h1>
-	<h1>Timelines</h1>
-	<h1>Timelines</h1>
-	<h1>Timelines</h1>
-	<h1>Timelines</h1>
-	<h1>Timelines</h1>
-	<h1>Timelines</h1>
-	<h1>Timelines</h1>
-	<h1>Timelines</h1>
-	<h1>Timelines</h1>
-	<h1>Timelines</h1>
-	<h1>Timelines</h1>
+	<h1 class="title">Welcome to Timelines</h1>
+
+	<h2 class="title">Labels</h2>
+	<input type="text" placeholder="Search labels...">
+	@for (label of labels; track $index) {
+	<div class="label" [style.background-color]="label.color">
+		{{ label.name }} <button (click)="addLabel(label)"><i class="fa-solid fa-plus"></i></button>
+	</div>
+	}
+
+	<h2 class="title">Active labels</h2>
+	@for (label of activeLabels; track $index) {
+	<div class="label" [style.background-color]="label.color">
+		{{ label.name }} <button (click)="removeLabel(label)"><i class="fa-solid fa-xmark"></i></button>
+	</div>
+	}
+
+	<h2 class="title">Timeline</h2>
+	<i class="fa-solid fa-magnifying-glass-plus"></i>
+	<i class="fa-solid fa-magnifying-glass-minus"></i>
+	<app-timeline [startDate]="'0000-01-01'" [endDate]="today" [events]="activeEvents" />
 </div>

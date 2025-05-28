@@ -1,14 +1,26 @@
+@import 'variables';
+
+@import url('https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&family=Limelight&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
+
 html,
 body {
 	margin: 0;
 	padding: 0;
 	font-family: sans-serif;
 	min-height: 100vh;
+	background-color: $dark-color-2;
+	color: $main-color;
+	font-family: "Nunito Sans", sans-serif;
 }
 
 a {
 	text-decoration: none;
 	color: inherit;
+	transition: all 0.2s ease-in-out;
+
+	&:hover {
+		transform: scale(1.1);
+	}
 }
 
 .container {
@@ -20,4 +32,49 @@ a {
 .container-fluid {
 	padding: 0 2rem;
 	margin: auto;
+}
+
+.title {
+	// color: $contrast-color;
+	// font-family: "Funnel Display", sans-serif;
+	font-family: "Limelight", sans-serif;
+}
+
+.box {
+	background-color: $dark-color-1;
+}
+
+.section {
+	margin-bottom: 2rem;
+}
+
+button {
+	background-color: $contrast-color;
+	color: $main-color;
+	border: 0;
+	cursor: pointer;
+	padding: 0.8rem 1rem;
+}
+
+.label {
+	width: fit-content;
+	padding: 0.4rem;
+	display: inline-block;
+	margin: 0.2rem;
+
+	button {
+		background-color: $dark-color-1;
+		padding: 0.3rem;
+
+		&:hover {
+			background-color: $dark-color-3;
+		}
+	}
+}
+
+input {
+	background-color: $dark-color-3;
+	color: $main-color;
+	border: 0;
+	padding: 0.7rem;
 }

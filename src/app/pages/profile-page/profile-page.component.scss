@@ -1,0 +1,30 @@
+@import '../../../variables';
+
+.profile {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.left,
+.right {
+	padding: 3rem;
+}
+
+.right {
+	max-width: 60rem;
+}
+
+.avatar {
+	border-radius: 50%;
+	width: 7rem;
+	height: 7rem;
+	overflow: hidden;
+}
+
+.logout-button {
+	background-color: $danger-color;
+
+	&:hover {
+		background-color: lighten($color: $danger-color, $amount: 10%);
+	}
+}

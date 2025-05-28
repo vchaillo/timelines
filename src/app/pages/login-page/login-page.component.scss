@@ -1,0 +1,11 @@
+.box {
+	// width: fit-content;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	.login-form {
+		width: fit-content;
+		padding: 5rem;
+	}
+}

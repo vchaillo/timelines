@@ -1,5 +1,9 @@
+@import '../../../variables';
+
 footer {
-	background-color: royalblue;
 	padding: 1rem;
-	color: whitesmoke;
+	background-color: $dark-color-1;
+	color: $contrast-color;
+	display: flex;
+	justify-content: center;
 }

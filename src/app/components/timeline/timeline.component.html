@@ -1,0 +1,36 @@
+<div class="section">
+
+	<div class="dates">
+		<div class="start-date">{{ startDate }}</div>
+		<div class="end-date">{{ endDate }}</div>
+	</div>
+
+	<div #timeline class="timeline"></div>
+
+	<div class="events">
+		@for (event of events; track $index) {
+		<div class="event-round" [style.background-color]="event.color"></div>
+		<div class="event-details">
+			<h3>{{ event.name }}</h3>
+			<p>{{ event.startDate }}</p>
+			@for (label of event.labels; track $index) {
+			<div class="label" [style.background-color]="label.color">{{ label.name }}</div>
+			}
+		</div>
+		}
+	</div>
+
+	<div class="timeline-details">
+		<p>{{ events.length }} events</p>
+	</div>
+</div>
+
+<!-- <div class="section">
+	<div class="timeline"></div>
+
+	<div class="events">
+		@for (event of events; track $index) {
+		<div class="event-line"></div>
+		}
+	</div>
+</div> -->

@@ -1,7 +1,11 @@
 <header>
 	<a [routerLink]="''" routerLinkActive="router-link-active">
-		<h3>Timelines</h3>
+		<h3 class="title">Timelines</h3>
 	</a>
 
-	<a [routerLink]="'/profile'" routerLinkActive="router-link-active"><i class="fa-solid fa-user"></i></a>
+	<a [routerLink]="'/profile'" routerLinkActive="router-link-active">
+		<div class="avatar">
+			<img src="https://picsum.photos/50/50" alt="Profile picture">
+		</div>
+	</a>
 </header>
