@@ -42,3 +42,5 @@ jobs:
         with:
           branch: gh-pages
           folder: website
+          ssh-key: ${{ secrets.SSH_KEY }}
+
