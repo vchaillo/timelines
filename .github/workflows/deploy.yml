@@ -1,37 +1,43 @@
-name: Deploy Angular to GitHub Pages
-
+name: Build and deploy Timelines
 on:
-    push:
-        branches: ["main"]
-    pull_request:
-        branches: ["main"]
-
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build Angular app
-        # run: ng build --configuration=production --base-href "/vchaillo/"
-        run: NODE_ENV=production npm run build --if-present
-
-      - name: Force https
-        run: touch dist/timelines/.nojekyll
-
-      - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: touch dist/timelines/browser/.nojekyll
+      - uses: actions/upload-artifact@v4
         with:
-          branch: gh-pages 
-          folder: dist/timelines/browser
-          ssh-key: ${{ secrets.SSH_KEY }}
+          name: website
+          path: dist/timelines/browser
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: website
+          path: website
+      - uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: website

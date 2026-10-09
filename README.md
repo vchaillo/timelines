@@ -1,27 +1,24 @@
 # Timelines
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.0.6.
+A French-language historical timeline rebuilt with Angular standalone components.
 
-## Development server
+## Development
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+```sh
+npm ci
+npm start
+npm run build
+```
 
-## Code scaffolding
+The GitHub Actions workflow builds pull requests and deploys the default branch to `gh-pages`. GitHub Pages must serve the root of that branch.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Features
 
-## Build
+- Combine three categories: wars, French political regimes, natural disasters.
+- Filter by era, search without accent sensitivity, reverse chronology, jump to key years.
+- Native accessible detail dialogs, Wikipedia references, previous/next navigation.
+- Local favorites and random discovery; responsive layout and reduced-motion support.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## Editorial scope
 
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+26 selected records, not an exhaustive or globally representative history. Political regimes currently cover France. Events are ordered by start year, and spacing is not a proportional time scale. Period filters include overlapping events. The Fifth Republic is open-ended; the First Empire record explains the separate Hundred Days episode. Summaries are original editorial introductions, with linked Wikipedia articles for references and further reading. Dataset: `src/app/events.ts`.

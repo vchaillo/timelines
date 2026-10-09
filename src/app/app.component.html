@@ -1,11 +1,234 @@
-@if (isLoading) {
-<app-loader />
-} @else {
+<header>
+  <a class="brand" href="#"
+    ><span class="brand-mark">t<span>•</span></span
+    >timelines<span class="brand-dot">.</span></a
+  ><span class="header-caption">L’histoire, mise en perspective.</span
+  ><button
+    class="favorite-nav"
+    [class.active]="favoritesOnly()"
+    (click)="favoritesOnly.set(!favoritesOnly())"
+    [attr.aria-pressed]="favoritesOnly()"
+  >
+    ☆ <span>Mes repères</span> <b>{{ favorites().length }}</b>
+  </button>
+</header>
 <main>
-  <app-header />
-
-  <router-outlet></router-outlet>
-
-  <!-- <app-footer /> -->
+  <section class="hero">
+    <div class="eyebrow"><span></span> UN VOYAGE À TRAVERS LE TEMPS</div>
+    <h1>Les événements passent.<br /><em>Leurs traces restent.</em></h1>
+    <p>
+      Reliez les époques, croisez les histoires.<br />Explorez les moments qui
+      ont façonné notre monde.
+    </p>
+    <button
+      class="discover"
+      (click)="surprise()"
+      [disabled]="!filtered().length"
+    >
+      ✧ Découvrir un événement <span>↗</span>
+    </button>
+    <div class="hero-orbit" aria-hidden="true">
+      <div class="orbit-line"></div>
+      <span class="orbit-date a">1792</span
+      ><span class="orbit-date b">1914</span
+      ><span class="orbit-date c">2004</span><i class="orbit-point a"></i
+      ><i class="orbit-point b"></i><i class="orbit-point c"></i
+      ><span class="orbit-label">CHAQUE DATE<br />CHANGE LA SUITE.</span>
+    </div>
+  </section>
+  <section class="explorer" aria-label="Explorateur chronologique">
+    <aside>
+      <div class="sidebar-label">VOTRE EXPLORATION</div>
+      <h2>Croiser les histoires</h2>
+      <p class="aside-help">Choisissez un ou plusieurs thèmes.</p>
+      <div class="category-list">
+        @for (category of categories; track category.id) {
+          <button
+            [style.--accent]="category.color"
+            [class.chosen]="activeCategories().includes(category.id)"
+            (click)="toggleCategory(category.id)"
+            [attr.aria-pressed]="activeCategories().includes(category.id)"
+          >
+            <span class="category-icon">{{ category.icon }}</span
+            ><span
+              >{{ category.label
+              }}<small>{{
+                category.id === "politics"
+                  ? "France · depuis 1791"
+                  : "Une sélection mondiale"
+              }}</small></span
+            ><span class="check">{{
+              activeCategories().includes(category.id) ? "✓" : "+"
+            }}</span>
+          </button>
+        }
+      </div>
+      <div class="sidebar-label period-label">CHOISIR UNE ÉPOQUE</div>
+      <nav class="era-list" aria-label="Époques">
+        @for (period of eras; track period.id) {
+          <button
+            [class.current]="era() === period.id"
+            (click)="era.set(period.id)"
+            [attr.aria-pressed]="era() === period.id"
+          >
+            <span>{{ period.label }}</span
+            ><span>↗</span>
+          </button>
+        }
+      </nav>
+      <div class="note">
+        <span>i</span>
+        <p>
+          Une sélection pour commencer.<br />La frise est ordonnée par date de
+          début. Les espacements ne représentent pas les durées.
+        </p>
+      </div>
+    </aside>
+    <div class="timeline-area">
+      <div class="toolbar">
+        <label class="search"
+          ><span>⌕</span
+          ><input
+            type="search"
+            placeholder="Une date, un lieu, un événement…"
+            aria-label="Rechercher un événement"
+            [ngModel]="query()"
+            (ngModelChange)="query.set($event)" /></label
+        ><button
+          class="sort"
+          (click)="reverse.set(!reverse())"
+          [attr.aria-label]="
+            reverse()
+              ? 'Afficher du plus ancien au plus récent'
+              : 'Afficher du plus récent au plus ancien'
+          "
+        >
+          ↕
+          <span>{{ reverse() ? "Récent → ancien" : "Ancien → récent" }}</span>
+        </button>
+      </div>
+      <div class="timeline-meta">
+        <span aria-live="polite"
+          ><b>{{ filtered().length }}</b> repères à explorer
+          {{ favoritesOnly() ? "· favoris" : "" }}</span
+        ><span class="timeline-hint">Cliquez pour remonter le fil ↘</span>
+      </div>
+      <div class="jump-bar">
+        <span>Aller à</span>
+        @for (year of [1792, 1914, 1954, 2004]; track year) {
+          <button (click)="jump(year)">{{ year }}</button>
+        }
+      </div>
+      <div class="timeline">
+        @for (event of filtered(); track event.id; let index = $index) {
+          @if (index === 0 || group(event) !== group(filtered()[index - 1])) {
+            <div class="era-marker">
+              <span>{{ group(event) }}</span>
+            </div>
+          }
+          <article
+            class="event-row"
+            [class.right]="index % 2 === 1"
+            [id]="event.id"
+            [style.--accent]="category(event.category).color"
+          >
+            <span class="timeline-point" aria-hidden="true"></span
+            ><span class="axis-year">{{ year(event.start) }}</span
+            ><button class="event-card" (click)="open(event)">
+              <div class="card-top">
+                <span class="tag">{{ category(event.category).label }}</span
+                ><span class="card-arrow">↗</span>
+              </div>
+              <div class="event-date">{{ dates(event) }}</div>
+              <h3>{{ event.title }}</h3>
+              <p>{{ event.summary }}</p>
+              <div class="card-bottom">
+                <span>{{ event.location }}</span
+                ><span>{{ favorites().includes(event.id) ? "★" : "+" }}</span>
+              </div>
+            </button>
+          </article>
+        }
+        @if (!filtered().length) {
+          <div class="empty">
+            <span>⌕</span>
+            <h3>Aucun repère dans cette sélection</h3>
+            <p>
+              Essayez un autre thème, une autre époque ou une recherche plus
+              large.
+            </p>
+            <button (click)="reset()">Réinitialiser les filtres</button>
+          </div>
+        }
+      </div>
+      <div class="end-mark">
+        <span>✧</span>
+        <p>L’histoire ne s’arrête pas ici.</p>
+        <button (click)="surprise()" [disabled]="!filtered().length">
+          Explorer au hasard ↗
+        </button>
+      </div>
+    </div>
+  </section>
 </main>
-}
+<footer>
+  <a class="brand" href="#">timelines.</a>
+  <p>Comprendre hier. Éclairer aujourd’hui.</p>
+  <span>26 repères · 3 regards sur l’histoire</span>
+</footer>
+<dialog
+  id="event-dialog"
+  (click)="$event.target === $event.currentTarget && close()"
+  (cancel)="close()"
+>
+  @if (selected(); as event) {
+    <div class="detail" [style.--accent]="category(event.category).color">
+      <div class="detail-top">
+        <span class="tag">{{ category(event.category).label }}</span
+        ><button class="close" aria-label="Fermer la fiche" (click)="close()">
+          ×
+        </button>
+      </div>
+      <div class="detail-date">{{ dates(event) }}</div>
+      <h2>{{ event.title }}</h2>
+      <div class="detail-location">↗ {{ event.location }}</div>
+      <p class="detail-summary">{{ event.summary }}</p>
+      <h3>Les points de repère</h3>
+      <ol>
+        @for (fact of event.facts; track fact) {
+          <li>{{ fact }}</li>
+        }
+      </ol>
+      <div class="detail-actions">
+        <a [href]="event.article" target="_blank" rel="noopener noreferrer"
+          >Lire sur Wikipédia ↗</a
+        ><button
+          (click)="toggleFavorite(event)"
+          [attr.aria-pressed]="favorites().includes(event.id)"
+        >
+          {{
+            favorites().includes(event.id)
+              ? "★ Repère enregistré"
+              : "☆ Garder ce repère"
+          }}
+        </button>
+      </div>
+      <p class="source-note">
+        Résumé de découverte, non exhaustif. Les dates anciennes et les bornes
+        des périodes peuvent varier selon les sources. Consultez l’article et
+        ses références pour approfondir.
+      </p>
+      <div class="detail-navigation">
+        <button (click)="navigate(-1)" [disabled]="selectedIndex() <= 0">
+          ← Précédent</button
+        ><span>{{ selectedIndex() + 1 }} / {{ filtered().length }}</span
+        ><button
+          (click)="navigate(1)"
+          [disabled]="selectedIndex() >= filtered().length - 1"
+        >
+          Suivant →
+        </button>
+      </div>
+    </div>
+  }
+</dialog>
